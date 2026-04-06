@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 interface VideoUploaderProps {
   onFile: (file: File) => void;
@@ -8,7 +8,6 @@ interface VideoUploaderProps {
 }
 
 export default function VideoUploader({ onFile, currentFile }: VideoUploaderProps) {
-  const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
 
   const handleFile = (file: File) => {
@@ -33,14 +32,12 @@ export default function VideoUploader({ onFile, currentFile }: VideoUploaderProp
           const file = e.dataTransfer.files[0];
           if (file) handleFile(file);
         }}
-        onClick={() => inputRef.current?.click()}
       >
         <span className="text-2xl">🎬</span>
         <span className="text-sm text-zinc-400 text-center">
           Drop a video or image here or click to browse
         </span>
         <input
-          ref={inputRef}
           type="file"
           accept="video/*,image/*"
           className="hidden"

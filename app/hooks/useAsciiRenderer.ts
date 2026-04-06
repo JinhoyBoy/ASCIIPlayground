@@ -2,15 +2,16 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 
-const CHAR_RAMP = " .:-=+*#%@";
+export const DEFAULT_RAMP = " .:-=+*#%@";
 
 export type RendererStatus = "idle" | "playing" | "paused" | "stopped";
 
-export function useAsciiRenderer(file: File | null, columnCount: number) {
+export function useAsciiRenderer(file: File | null, columnCount: number, ramp: string) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
   const columnCountRef = useRef(columnCount);
+  const rampRef = useRef(ramp);
   const objectUrlRef = useRef<string | null>(null);
   const rafRef = useRef<number | null>(null);
   const [asciiFrame, setAsciiFrame] = useState("");
@@ -23,10 +24,9 @@ export function useAsciiRenderer(file: File | null, columnCount: number) {
     setStatus(s);
   }
 
-  // Sync columnCount into ref
-  useEffect(() => {
-    columnCountRef.current = columnCount;
-  }, [columnCount]);
+  // Sync refs
+  useEffect(() => { columnCountRef.current = columnCount; }, [columnCount]);
+  useEffect(() => { rampRef.current = ramp; }, [ramp]);
 
   const renderToAscii = useCallback((source: HTMLVideoElement | HTMLImageElement, width: number, height: number) => {
     const canvas = canvasRef.current;
@@ -50,8 +50,8 @@ export function useAsciiRenderer(file: File | null, columnCount: number) {
         const i = (y * cols + x) * 4;
         const r = data[i], g = data[i + 1], b = data[i + 2];
         const luma = 0.299 * r + 0.587 * g + 0.114 * b;
-        const charIdx = Math.floor((luma / 255) * (CHAR_RAMP.length - 1));
-        frame += CHAR_RAMP[charIdx];
+        const charIdx = Math.floor((luma / 255) * (rampRef.current.length - 1));
+        frame += rampRef.current[charIdx];
       }
       frame += "\n";
     }
@@ -124,12 +124,12 @@ export function useAsciiRenderer(file: File | null, columnCount: number) {
     }
   }, [file]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Refresh frame when column count changes while paused (images or paused video)
+  // Refresh frame when column count or ramp changes while paused (images or paused video)
   useEffect(() => {
     if (statusRef.current === "paused") {
       drawFrame();
     }
-  }, [columnCount, drawFrame]);
+  }, [columnCount, ramp, drawFrame]);
 
   // Cleanup on unmount
   useEffect(() => {

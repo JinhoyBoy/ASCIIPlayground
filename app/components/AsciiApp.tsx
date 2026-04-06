@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useAsciiRenderer } from "@/app/hooks/useAsciiRenderer";
+import { useAsciiRenderer, DEFAULT_RAMP } from "@/app/hooks/useAsciiRenderer";
 import VideoUploader from "@/app/components/VideoUploader";
 import Controls from "@/app/components/Controls";
 import AsciiCanvas from "@/app/components/AsciiCanvas";
@@ -9,8 +9,9 @@ import AsciiCanvas from "@/app/components/AsciiCanvas";
 export default function AsciiApp() {
   const [file, setFile] = useState<File | null>(null);
   const [columnCount, setColumnCount] = useState(100);
+  const [ramp, setRamp] = useState(DEFAULT_RAMP);
 
-  const { asciiFrame, videoRef, canvasRef, controls, status, isImage } = useAsciiRenderer(file, columnCount);
+  const { asciiFrame, videoRef, canvasRef, controls, status, isImage } = useAsciiRenderer(file, columnCount, ramp);
 
   return (
     <div className="flex h-full w-full">
@@ -28,6 +29,8 @@ export default function AsciiApp() {
           isImage={isImage}
           columnCount={columnCount}
           onColumnCountChange={setColumnCount}
+          ramp={ramp}
+          onRampChange={setRamp}
           controls={controls}
         />
       </aside>
