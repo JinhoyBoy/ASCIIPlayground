@@ -29,8 +29,8 @@ export default function AsciiCanvas({ asciiFrame, columnCount, color }: AsciiCan
 
   if (!asciiFrame) {
     return (
-      <div className="flex h-full items-center justify-center text-zinc-600 text-sm">
-        Upload a video and press Play
+      <div className="flex h-full items-center justify-center text-zinc-300 text-sm">
+        Upload a video or image to see the ASCII art
       </div>
     );
   }

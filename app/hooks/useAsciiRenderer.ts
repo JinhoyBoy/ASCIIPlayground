@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 
 export const DEFAULT_RAMP = " .:-=+*#%@";
 
-export type RendererStatus = "idle" | "playing" | "paused" | "stopped";
+export type RendererStatus = "idle" | "playing" | "paused";
 
 export function useAsciiRenderer(file: File | null, columnCount: number, ramp: string) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -119,8 +119,13 @@ export function useAsciiRenderer(file: File | null, columnCount: number, ramp: s
       setIsImage(false);
       video.src = url;
       video.load();
-      updateStatus("stopped");
-      setAsciiFrame("");
+      video.addEventListener("canplay", () => {
+        video.play().then(() => {
+          cancelRaf();
+          updateStatus("playing");
+          rafRef.current = requestAnimationFrame(tick);
+        }).catch(() => {});
+      }, { once: true });
     }
   }, [file]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -171,16 +176,6 @@ export function useAsciiRenderer(file: File | null, columnCount: number, ramp: s
     drawFrame();
   }, [drawFrame]);
 
-  const stop = useCallback(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    video.pause();
-    video.currentTime = 0;
-    cancelRaf();
-    updateStatus("stopped");
-    setAsciiFrame("");
-  }, []);
-
   // Handle video ended
   useEffect(() => {
     const video = videoRef.current;
@@ -188,18 +183,20 @@ export function useAsciiRenderer(file: File | null, columnCount: number, ramp: s
 
     const handleEnded = () => {
       cancelRaf();
-      updateStatus("stopped");
+      video.currentTime = 0;
+      updateStatus("paused");
+      drawFrame();
     };
 
     video.addEventListener("ended", handleEnded);
     return () => video.removeEventListener("ended", handleEnded);
-  }, []);
+  }, [drawFrame]);
 
   return {
     asciiFrame,
     videoRef,
     canvasRef,
-    controls: { play, pause, stop },
+    controls: { play, pause },
     status,
     isImage,
   };
