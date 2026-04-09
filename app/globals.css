@@ -27,10 +27,9 @@ body {
 
 pre.ascii-output {
   font-family: var(--font-mono);
-  font-size: 7px;
   line-height: 1;
   letter-spacing: 0;
   white-space: pre;
-  overflow: auto;
+  overflow: hidden;
   margin: 0;
 }

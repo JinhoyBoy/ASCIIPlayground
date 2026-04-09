@@ -10,6 +10,8 @@ interface ControlsProps {
   onColumnCountChange: (v: number) => void;
   ramp: string;
   onRampChange: (v: string) => void;
+  color: string;
+  onColorChange: (v: string) => void;
   controls: { play(): void; pause(): void; stop(): void };
 }
 
@@ -21,6 +23,8 @@ export default function Controls({
   onColumnCountChange,
   ramp,
   onRampChange,
+  color,
+  onColorChange,
   controls,
 }: ControlsProps) {
   const canPlay = !disabled && status !== "playing";
@@ -36,21 +40,21 @@ export default function Controls({
             disabled={!canPlay}
             onClick={controls.play}
           >
-            Play
+            ▸
           </button>
           <button
             className="flex-1 rounded px-3 py-1.5 text-sm bg-zinc-600 hover:bg-zinc-500 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
             disabled={!canPause}
             onClick={controls.pause}
           >
-            Pause
+            ⏸
           </button>
           <button
             className="flex-1 rounded px-3 py-1.5 text-sm bg-zinc-700 hover:bg-zinc-600 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
             disabled={!canStop}
             onClick={controls.stop}
           >
-            Stop
+            ⏹
           </button>
         </div>
       )}
@@ -64,6 +68,16 @@ export default function Controls({
           value={columnCount}
           onChange={(e) => onColumnCountChange(Number(e.target.value))}
           className="w-full accent-[#1a80e6]"
+        />
+      </div>
+
+      <div className="flex flex-col gap-1">
+        <label className="text-xs text-zinc-400">Text color</label>
+        <input
+          type="color"
+          value={color}
+          onChange={(e) => onColorChange(e.target.value)}
+          className="w-full h-8 rounded border border-zinc-600 bg-zinc-800 cursor-pointer"
         />
       </div>
 

@@ -189,7 +189,6 @@ export function useAsciiRenderer(file: File | null, columnCount: number, ramp: s
     const handleEnded = () => {
       cancelRaf();
       updateStatus("stopped");
-      setAsciiFrame("");
     };
 
     video.addEventListener("ended", handleEnded);

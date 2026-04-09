@@ -10,6 +10,7 @@ export default function AsciiApp() {
   const [file, setFile] = useState<File | null>(null);
   const [columnCount, setColumnCount] = useState(100);
   const [ramp, setRamp] = useState(DEFAULT_RAMP);
+  const [color, setColor] = useState("#ffffff");
 
   const { asciiFrame, videoRef, canvasRef, controls, status, isImage } = useAsciiRenderer(file, columnCount, ramp);
 
@@ -31,13 +32,15 @@ export default function AsciiApp() {
           onColumnCountChange={setColumnCount}
           ramp={ramp}
           onRampChange={setRamp}
+          color={color}
+          onColorChange={setColor}
           controls={controls}
         />
       </aside>
 
       {/* ASCII output panel */}
       <section className="flex-1 bg-black overflow-auto p-2">
-        <AsciiCanvas asciiFrame={asciiFrame} />
+        <AsciiCanvas asciiFrame={asciiFrame} columnCount={columnCount} color={color} />
       </section>
     </div>
   );

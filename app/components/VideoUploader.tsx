@@ -33,7 +33,6 @@ export default function VideoUploader({ onFile, currentFile }: VideoUploaderProp
           if (file) handleFile(file);
         }}
       >
-        <span className="text-2xl">🎬</span>
         <span className="text-sm text-zinc-400 text-center">
           Drop a video or image here or click to browse
         </span>
