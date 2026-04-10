@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ASCII Playground
+
+A browser-based tool that converts videos and images into real-time ASCII art. Upload any media file, tweak the settings, and watch it render as characters — all client-side, no server processing.
+
+![ASCII Playground screenshot](public/ASCII-Video.gif)
+
+
+## Features
+
+- **Video & image support** — drag-and-drop or file picker for any video/image format the browser supports
+- **Real-time rendering** — videos play back as ASCII at full frame rate using `requestAnimationFrame`
+- **Customizable character ramp** — change which characters map to light/dark values
+- **Color controls** — pick text and background colors with live preview
+- **Responsive scaling** — ASCII output auto-sizes to fill the viewport
+- **Collapsible sidebar** — minimize controls for a cleaner view
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- [Next.js](https://nextjs.org) 16 (App Router)
+- [React](https://react.dev) 19
+- [TypeScript](https://www.typescriptlang.org) 5
+- [Tailwind CSS](https://tailwindcss.com) v4
 
-## Learn More
+## How It Works
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Upload a video or image via the sidebar
+2. The file is loaded into a hidden `<video>` or `<img>` element
+3. Each frame is drawn to an offscreen `<canvas>`, pixel data is read, and luminance is mapped to characters from the ramp string
+4. The resulting ASCII text is rendered in a `<pre>` element that auto-scales to fit the viewport
