@@ -1,11 +1,10 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { useAsciiRenderer, DEFAULT_RAMP } from "@/app/hooks/useAsciiRenderer";
+import { AsciiCanvas, useAsciiRenderer, DEFAULT_RAMP } from "react-ascii-canvas";
 import MediaUploader from "@/app/components/MediaUploader";
 import { Minimize2 } from "lucide-react";
 import Controls from "@/app/components/Controls";
-import AsciiCanvas from "@/app/components/AsciiCanvas";
 
 export default function AsciiApp() {
   const [file, setFile] = useState<File | null>(null);
